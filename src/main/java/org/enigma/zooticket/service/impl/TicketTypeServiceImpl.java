@@ -47,6 +47,11 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     }
 
     @Override
+    public TicketType getById(String id) {
+        return ticketTypeRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public void delete(String id) {
         TicketType ticketType = ticketTypeRepository.findById(id).orElse(null);
 

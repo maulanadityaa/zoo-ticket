@@ -14,5 +14,5 @@ public class TicketResponse {
     private String id;
     private Integer stock;
     private String validAt;
-    private TicketType ticketType;
+    private TicketTypeResponse ticketType;
 }

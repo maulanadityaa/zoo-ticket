@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.enigma.zooticket.constant.ETicketType;
 import org.enigma.zooticket.model.entity.TicketType;
 
 import java.util.Date;
@@ -16,5 +17,5 @@ public class TicketRequest {
     private String id;
     private Integer stock;
     private String validAt;
-    private TicketType ticketType;
+    private ETicketType ticketType;
 }

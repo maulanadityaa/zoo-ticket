@@ -5,6 +5,7 @@ import org.enigma.zooticket.model.entity.Ticket;
 import org.enigma.zooticket.model.entity.TicketType;
 import org.enigma.zooticket.model.request.TicketRequest;
 import org.enigma.zooticket.model.response.TicketResponse;
+import org.enigma.zooticket.model.response.TicketTypeResponse;
 import org.enigma.zooticket.repository.TicketRepository;
 import org.enigma.zooticket.service.TicketService;
 import org.enigma.zooticket.service.TicketTypeService;
@@ -23,7 +24,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public TicketResponse createTicket(TicketRequest ticketRequest) {
         try {
-            TicketType ticketType = ticketTypeService.getByTicketType(ticketRequest.getTicketType().getTicketType());
+            TicketType ticketType = ticketTypeService.getByTicketType(ticketRequest.getTicketType());
             if (ticketType != null) {
                 Ticket ticket = toTicket(ticketRequest, ticketType);
                 ticketRepository.save(ticket);
@@ -42,7 +43,7 @@ public class TicketServiceImpl implements TicketService {
             Ticket ticket = ticketRepository.findById(ticketRequest.getId()).orElse(null);
 
             if (ticket != null) {
-                TicketType ticketType = ticketTypeService.getByTicketType(ticketRequest.getTicketType().getTicketType());
+                TicketType ticketType = ticketTypeService.getByTicketType(ticketRequest.getTicketType());
 
                 if (ticketType != null) {
                     ticket = Ticket.builder()
@@ -83,7 +84,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void deleteTicket(String id) {
-        ticketRepository.findById(id).ifPresent(ticket -> ticketRepository.delete(ticket));
+        ticketRepository.findById(id).ifPresent(ticketRepository::delete);
     }
 
     private static TicketResponse toTicketResponse(Ticket ticket) {
@@ -91,9 +92,11 @@ public class TicketServiceImpl implements TicketService {
                 .id(ticket.getId())
                 .stock(ticket.getStock())
                 .validAt(Helper.dateToString(ticket.getValidAt()))
-                .ticketType(TicketType.builder()
+                .ticketType(TicketTypeResponse.builder()
+                        .id(ticket.getTicketType().getId())
                         .ticketType(ticket.getTicketType().getTicketType())
                         .price(ticket.getTicketType().getPrice())
+                        .status(ticket.getTicketType().getStatus())
                         .build())
                 .build();
     }

@@ -10,6 +10,8 @@ public interface TicketTypeService {
 
     TicketTypeResponse update(TicketTypeRequest ticketType);
 
+    TicketType getById(String id);
+
     TicketType getByTicketType(ETicketType ticketType);
 
     void delete(String id);
