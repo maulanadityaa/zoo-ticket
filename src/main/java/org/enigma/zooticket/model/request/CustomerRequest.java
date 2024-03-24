@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.enigma.zooticket.model.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -14,10 +15,10 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerRequest {
-    @NotBlank(message = "name must not be empty")
-    private String fullName;
     private String id;
+    private String fullName;
     private String phone;
     private String email;
-    private Date dateOfBirth;
+    private String dateOfBirth;
+    private User user;
 }
