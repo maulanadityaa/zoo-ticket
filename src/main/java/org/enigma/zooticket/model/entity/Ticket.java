@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -32,7 +32,7 @@ public class Ticket {
     private Integer stock;
 
     @Column(name = "valid_at", nullable = false)
-    private LocalDateTime validAt;
+    private Date validAt;
 
     @ManyToOne
     @JoinColumn(name = "ticket_type_id")
