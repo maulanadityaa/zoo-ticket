@@ -19,15 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableMethodSecurity
 public class SecurityConfiguration {
-//    private final AuthTokenFilter authTokenFilter;
+    private final AuthTokenFilter authTokenFilter;
 
     private static final String[] WHITE_LIST_URL = {
-//            "/api/auth/**",
+            "/api/v1/auth/**",
 //            "/swagger-ui/**",
 //            "/v3/api-docs/**",
-//            "api/post",
-//            "api/post/**",
-            "/api/v1/**"
     };
 
     @Bean
@@ -47,8 +44,8 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

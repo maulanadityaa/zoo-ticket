@@ -8,11 +8,9 @@ import org.enigma.zooticket.model.response.CustomerResponse;
 import org.enigma.zooticket.repository.CustomerRepository;
 import org.enigma.zooticket.service.CustomerService;
 import org.enigma.zooticket.util.Helper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -38,8 +36,8 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponse update(CustomerRequest customerRequest) {
         Customer customer = customerRepository.findById(customerRequest.getId()).orElse(null);
 
-        try{
-            if (customer!= null) {
+        try {
+            if (customer != null) {
                 customer = Customer.builder()
                         .id(customer.getId())
                         .fullName(customerRequest.getFullName())
@@ -64,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponse findById(String id) {
         Customer customer = customerRepository.findById(id).orElse(null);
 
-        if(customer!= null) {
+        if (customer != null) {
             return toCustomerResponse(customer);
         }
         return null;
@@ -81,7 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void delete(String id) {
         Customer customer = customerRepository.findById(id).orElse(null);
 
-        if (customer!= null) {
+        if (customer != null) {
             customer.setStatus(EStatus.INACTIVE);
             customerRepository.save(customer);
         }

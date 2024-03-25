@@ -8,9 +8,9 @@ import java.util.List;
 public interface TransactionService {
     TransactionResponse createTransaction(TransactionRequest transactionRequest);
 
-//    TransactionResponse updateTransaction(TransactionRequest transactionRequest);
-
     List<TransactionResponse> getAllTransactions();
+
+    List<TransactionResponse> getTransactionsByCustomerId(String customerId);
 
     TransactionResponse getTransactionById(String id);
 }
