@@ -28,7 +28,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "stock", nullable = false)
+    @Column(name = "stock", nullable = false, columnDefinition = "int check (stock > 0)")
     private Integer stock;
 
     @Column(name = "valid_at", nullable = false)

@@ -25,17 +25,14 @@ import java.time.LocalDateTime;
 @Table(name = "t_transaction_detail")
 public class TransactionDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity", nullable = false, columnDefinition = "int check (quantity > 0)")
     private Integer quantity;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "transaction_id")
@@ -44,5 +41,4 @@ public class TransactionDetail {
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
-
 }
