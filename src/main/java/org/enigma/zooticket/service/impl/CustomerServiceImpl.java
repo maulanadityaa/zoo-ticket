@@ -3,8 +3,10 @@ package org.enigma.zooticket.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.enigma.zooticket.constant.EStatus;
 import org.enigma.zooticket.model.entity.Customer;
+import org.enigma.zooticket.model.entity.User;
 import org.enigma.zooticket.model.request.CustomerRequest;
 import org.enigma.zooticket.model.response.CustomerResponse;
+import org.enigma.zooticket.model.response.UserResponse;
 import org.enigma.zooticket.repository.CustomerRepository;
 import org.enigma.zooticket.service.CustomerService;
 import org.enigma.zooticket.util.Helper;
@@ -92,14 +94,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .email(customer.getEmail())
                 .phone(customer.getMobilePhone())
                 .dateOfBirth(Helper.dateToString(customer.getDob()))
-                .userCredential(customer.getUser())
+                .userCredential(UserResponse.builder()
+                        .id(customer.getUser().getId())
+                        .username(customer.getUser().getUsername())
+                        .role(customer.getUser().getRole().getName())
+                        .build())
                 .build();
     }
 
     private static Customer toCustomer(CustomerRequest customerRequest) throws ParseException {
-        System.out.println(customerRequest.getDateOfBirth());
-        System.out.println(customerRequest.getPhone());
-        System.out.println(customerRequest.getFullName());
         return Customer.builder()
                 .fullName(customerRequest.getFullName())
                 .email(customerRequest.getEmail())

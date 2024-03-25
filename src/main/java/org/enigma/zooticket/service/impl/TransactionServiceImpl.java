@@ -3,10 +3,12 @@ package org.enigma.zooticket.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.enigma.zooticket.model.entity.Customer;
+import org.enigma.zooticket.model.entity.Role;
 import org.enigma.zooticket.model.entity.Ticket;
 import org.enigma.zooticket.model.entity.TicketType;
 import org.enigma.zooticket.model.entity.Transaction;
 import org.enigma.zooticket.model.entity.TransactionDetail;
+import org.enigma.zooticket.model.entity.User;
 import org.enigma.zooticket.model.request.TicketRequest;
 import org.enigma.zooticket.model.request.TransactionRequest;
 import org.enigma.zooticket.model.response.CustomerResponse;
@@ -14,6 +16,7 @@ import org.enigma.zooticket.model.response.TicketResponse;
 import org.enigma.zooticket.model.response.TicketTypeResponse;
 import org.enigma.zooticket.model.response.TransactionDetailResponse;
 import org.enigma.zooticket.model.response.TransactionResponse;
+import org.enigma.zooticket.model.response.UserResponse;
 import org.enigma.zooticket.repository.TransactionRepository;
 import org.enigma.zooticket.service.CustomerService;
 import org.enigma.zooticket.service.TicketService;
@@ -44,6 +47,13 @@ public class TransactionServiceImpl implements TransactionService {
                     .email(customerResponse.getEmail())
                     .dob(Helper.stringToDate(customerResponse.getDateOfBirth()))
                     .mobilePhone(customerResponse.getPhone())
+                    .user(User.builder()
+                            .id(customerResponse.getUserCredential().getId())
+                            .username(customerResponse.getUserCredential().getUsername())
+                            .role(Role.builder()
+                                    .name(customerResponse.getUserCredential().getRole())
+                                    .build())
+                            .build())
                     .build();
 
             List<TransactionDetail> transactionDetails = transactionRequest.getTransactionDetails().stream().map(transactionDetailRequest -> {
@@ -134,6 +144,19 @@ public class TransactionServiceImpl implements TransactionService {
         }).toList();
     }
 
+    @Override
+    public List<TransactionResponse> getTransactionsByCustomerId(String customerId) {
+        List<Transaction> transactionList = transactionRepository.findByCustomerId(customerId);
+        List<TransactionResponse> transactionResponses = new ArrayList<>();
+
+        for (Transaction transaction : transactionList) {
+            List<TransactionDetailResponse> transactionDetailResponses = toTransactionDetailResponseList(transaction);
+
+            transactionResponses.add(toTransactionResponse(transaction, transactionDetailResponses));
+        }
+        return transactionResponses;
+    }
+
     private static TransactionResponse toTransactionResponse(Transaction transaction, List<TransactionDetailResponse> transactionDetailResponses) {
         return TransactionResponse.builder()
                 .id(transaction.getId())
@@ -144,7 +167,11 @@ public class TransactionServiceImpl implements TransactionService {
                         .email(transaction.getCustomer().getEmail())
                         .phone(transaction.getCustomer().getMobilePhone())
                         .dateOfBirth(Helper.dateToString(transaction.getCustomer().getDob()))
-                        .userCredential(transaction.getCustomer().getUser())
+                        .userCredential(UserResponse.builder()
+                                .id(transaction.getCustomer().getUser().getId())
+                                .username(transaction.getCustomer().getUser().getUsername())
+                                .role(transaction.getCustomer().getUser().getRole().getName())
+                                .build())
                         .build())
                 .transactionDetails(transactionDetailResponses)
                 .build();

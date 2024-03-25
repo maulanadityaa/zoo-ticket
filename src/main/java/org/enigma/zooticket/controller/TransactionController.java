@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,6 +38,18 @@ public class TransactionController {
     @GetMapping
     public ResponseEntity<?> getAllTransactions() {
         List<TransactionResponse> transactionResponses = transactionService.getAllTransactions();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.<List<TransactionResponse>>builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message("All transactions retrieved successfully")
+                        .data(transactionResponses)
+                        .build());
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getTransactionsByCustomerId(@RequestParam("customer-id") String customerId) {
+        List<TransactionResponse> transactionResponses = transactionService.getTransactionsByCustomerId(customerId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.<List<TransactionResponse>>builder()
