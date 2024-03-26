@@ -7,6 +7,7 @@ import org.enigma.zooticket.model.response.TicketResponse;
 import org.enigma.zooticket.service.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<?> createTicket(@RequestBody TicketRequest ticketRequest) {
         TicketResponse ticketResponse = ticketService.createTicket(ticketRequest);
 
@@ -37,6 +39,7 @@ public class TicketController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateTicket(@RequestBody TicketRequest ticketRequest) {
         TicketResponse ticketResponse = ticketService.updateTicket(ticketRequest);
 
@@ -73,6 +76,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteTicket(@PathVariable String id) {
         ticketService.deleteTicket(id);
 

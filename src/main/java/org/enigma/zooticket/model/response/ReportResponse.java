@@ -6,16 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionResponse {
-    private String id;
-    private CustomerResponse customerResponse;
-    private LocalDateTime transactionDate;
+public class ReportResponse {
+    private String customerId;
+    private LocalDateTime transDate;
     private Long totalPrice;
-    private List<TransactionDetailResponse> transactionDetails;
+    private Integer totalTicket;
 }

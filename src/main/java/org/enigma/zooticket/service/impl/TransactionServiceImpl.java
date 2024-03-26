@@ -158,9 +158,14 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private static TransactionResponse toTransactionResponse(Transaction transaction, List<TransactionDetailResponse> transactionDetailResponses) {
+        Long totalPrice = (long) transactionDetailResponses.stream().mapToInt(tdr -> Math.toIntExact(tdr.getTicketResponse().getTicketType().getPrice() * tdr.getQuantity())).sum();
+        System.out.println(transaction.getTransDate().getMonthValue());
+        System.out.println(transaction.getTransDate().getYear());
+
         return TransactionResponse.builder()
                 .id(transaction.getId())
                 .transactionDate(transaction.getTransDate())
+                .totalPrice(totalPrice)
                 .customerResponse(CustomerResponse.builder()
                         .id(transaction.getCustomer().getId())
                         .fullName(transaction.getCustomer().getFullName())
