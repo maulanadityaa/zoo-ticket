@@ -1,5 +1,6 @@
 package org.enigma.zooticket.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.enigma.zooticket.constant.AppPath;
 import org.enigma.zooticket.model.request.TransactionRequest;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/transactions")
+@SecurityRequirement(name = "Bearer Authentication")
 public class TransactionController {
     private final TransactionService transactionService;
 

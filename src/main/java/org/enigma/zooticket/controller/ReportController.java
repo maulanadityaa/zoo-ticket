@@ -1,5 +1,6 @@
 package org.enigma.zooticket.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.enigma.zooticket.constant.AppPath;
 import org.enigma.zooticket.model.response.CommonResponse;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(AppPath.REPORTS)
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class ReportController {
     private final ReportService reportService;
 
