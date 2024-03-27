@@ -3,6 +3,7 @@ package org.enigma.zooticket.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.enigma.zooticket.model.entity.Ticket;
 import org.enigma.zooticket.model.entity.TicketType;
+import org.enigma.zooticket.model.exception.ApplicationException;
 import org.enigma.zooticket.model.request.TicketRequest;
 import org.enigma.zooticket.model.response.TicketResponse;
 import org.enigma.zooticket.model.response.TicketTypeResponse;
@@ -10,6 +11,7 @@ import org.enigma.zooticket.repository.TicketRepository;
 import org.enigma.zooticket.service.TicketService;
 import org.enigma.zooticket.service.TicketTypeService;
 import org.enigma.zooticket.util.Helper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -26,16 +28,14 @@ public class TicketServiceImpl implements TicketService {
     public TicketResponse createTicket(TicketRequest ticketRequest) {
         try {
             TicketType ticketType = ticketTypeService.getByTicketType(ticketRequest.getTicketType());
-            if (ticketType != null) {
-                Ticket ticket = toTicket(ticketRequest, ticketType);
-                ticketRepository.saveTicket(ticket);
+            Ticket ticket = toTicket(ticketRequest, ticketType);
+            ticketRepository.saveTicket(ticket);
 
-                return toTicketResponse(ticket);
-            }
+            return toTicketResponse(ticket);
         } catch (ParseException e) {
             e.printStackTrace();
+            throw new ApplicationException("Cannot create ticket", String.format("Cannot parse date=%s", ticketRequest.getValidAt()), HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 
     @Override
@@ -46,23 +46,20 @@ public class TicketServiceImpl implements TicketService {
             if (ticket != null) {
                 TicketType ticketType = ticketTypeService.getByTicketType(ticketRequest.getTicketType());
 
-                if (ticketType != null) {
-                    ticket = Ticket.builder()
-                            .id(ticketRequest.getId())
-                            .stock(ticketRequest.getStock())
-                            .validAt(Helper.stringToDate(ticketRequest.getValidAt()))
-                            .ticketType(ticketType)
-                            .build();
-                    ticketRepository.updateTicket(ticket);
+                ticket = Ticket.builder()
+                        .id(ticketRequest.getId())
+                        .stock(ticketRequest.getStock())
+                        .validAt(Helper.stringToDate(ticketRequest.getValidAt()))
+                        .ticketType(ticketType)
+                        .build();
+                ticketRepository.updateTicket(ticket);
 
-                    return toTicketResponse(ticket);
-                }
-                return null;
+                return toTicketResponse(ticket);
             }
-            return null;
+            throw new ApplicationException("Ticket not found", String.format("Ticket with id=%s", ticketRequest.getId()), HttpStatus.NOT_FOUND);
         } catch (ParseException e) {
             e.printStackTrace();
-            return null;
+            throw new ApplicationException("Cannot parse ticket", String.format("Cannot parse date=%s", ticketRequest.getValidAt()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -75,17 +72,15 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketResponse getTicketById(String id) {
-        Ticket ticket = ticketRepository.findById(id).orElse(null);
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new ApplicationException("Ticket not found", String.format("Ticket with id=%s", id), HttpStatus.NOT_FOUND));
 
-        if (ticket != null) {
-            return toTicketResponse(ticket);
-        }
-        return null;
+        return toTicketResponse(ticket);
     }
 
     @Override
     public void deleteTicket(String id) {
-        ticketRepository.findById(id).ifPresent(ticketRepository::delete);
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new ApplicationException("Ticket not found", String.format("Ticket with id=%s", id), HttpStatus.NOT_FOUND));
+        ticketRepository.delete(ticket);
     }
 
     private static TicketResponse toTicketResponse(Ticket ticket) {

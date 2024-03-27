@@ -9,6 +9,7 @@ import org.enigma.zooticket.model.entity.TicketType;
 import org.enigma.zooticket.model.entity.Transaction;
 import org.enigma.zooticket.model.entity.TransactionDetail;
 import org.enigma.zooticket.model.entity.User;
+import org.enigma.zooticket.model.exception.ApplicationException;
 import org.enigma.zooticket.model.request.TicketRequest;
 import org.enigma.zooticket.model.request.TransactionRequest;
 import org.enigma.zooticket.model.response.CustomerResponse;
@@ -22,6 +23,7 @@ import org.enigma.zooticket.service.CustomerService;
 import org.enigma.zooticket.service.TicketService;
 import org.enigma.zooticket.service.TransactionService;
 import org.enigma.zooticket.util.Helper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -72,7 +74,7 @@ public class TransactionServiceImpl implements TransactionService {
                             .validAt(Helper.stringToDate(ticketResponse.getValidAt()))
                             .build();
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    throw new ApplicationException("Cannot parse ticket", String.format("Cannot parse date=%s", ticketResponse.getValidAt()), HttpStatus.BAD_REQUEST);
                 }
 
                 return TransactionDetail.builder()
@@ -108,7 +110,7 @@ public class TransactionServiceImpl implements TransactionService {
             return toTransactionResponse(transaction, transactionDetailResponses);
         } catch (ParseException e) {
             e.printStackTrace();
-            return null;
+            throw new ApplicationException("Failed parse date", "Cannot parse date", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -127,13 +129,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionResponse getTransactionById(String id) {
-        Transaction transaction = transactionRepository.findById(id).orElse(null);
-        if (transaction != null) {
-            List<TransactionDetailResponse> transactionDetailResponses = toTransactionDetailResponseList(transaction);
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new ApplicationException("Transaction not found", String.format("Transaction with id=%s", id), HttpStatus.NOT_FOUND));
 
-            return toTransactionResponse(transaction, transactionDetailResponses);
-        }
-        return null;
+        List<TransactionDetailResponse> transactionDetailResponses = toTransactionDetailResponseList(transaction);
+
+        return toTransactionResponse(transaction, transactionDetailResponses);
     }
 
     private static List<TransactionDetailResponse> toTransactionDetailResponseList(Transaction transaction) {

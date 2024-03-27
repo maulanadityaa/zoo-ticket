@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.enigma.zooticket.constant.EStatus;
 import org.enigma.zooticket.constant.ETicketType;
 import org.enigma.zooticket.model.entity.TicketType;
+import org.enigma.zooticket.model.exception.ApplicationException;
 import org.enigma.zooticket.model.request.TicketTypeRequest;
 import org.enigma.zooticket.model.response.TicketTypeResponse;
 import org.enigma.zooticket.repository.TicketTypeRepository;
 import org.enigma.zooticket.service.TicketTypeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -40,27 +42,30 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 
             return toTicketTypeResponse(ticketType);
         }
-        return null;
+        throw new ApplicationException("Ticket Type not found", String.format("Ticket type with id=%s", ticketTypeRequest.getId()), HttpStatus.NOT_FOUND);
     }
 
     @Override
     public TicketType getByTicketType(ETicketType ticketType) {
-        return ticketTypeRepository.findByTicketType(ticketType);
+        TicketType type = ticketTypeRepository.findByTicketType(ticketType);
+
+        if (type != null) {
+            return type;
+        }
+        throw new ApplicationException("Ticket Type not found", String.format("Ticket type with id=%s", ticketType.toString()), HttpStatus.NOT_FOUND);
     }
 
     @Override
     public TicketType getById(String id) {
-        return ticketTypeRepository.findById(id).orElse(null);
+        return ticketTypeRepository.findById(id).orElseThrow(() -> new ApplicationException("Ticket Type not found", String.format("Ticket type with id=%s", id), HttpStatus.NOT_FOUND));
     }
 
     @Override
     public void delete(String id) {
-        TicketType ticketType = ticketTypeRepository.findById(id).orElse(null);
+        TicketType ticketType = getById(id);
 
-        if (ticketType != null) {
-            ticketType.setStatus(EStatus.INACTIVE);
-            ticketTypeRepository.updateTicketType(ticketType);
-        }
+        ticketType.setStatus(EStatus.INACTIVE);
+        ticketTypeRepository.updateTicketType(ticketType);
     }
 
     private static TicketTypeResponse toTicketTypeResponse(TicketType ticketType) {

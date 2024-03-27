@@ -81,8 +81,7 @@ public class AuthServiceImpl implements AuthService {
                     .role(user.getRole().getName().toString())
                     .build();
         } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
-            return null;
+            throw new DataIntegrityViolationException("User already exists");
         }
     }
 
