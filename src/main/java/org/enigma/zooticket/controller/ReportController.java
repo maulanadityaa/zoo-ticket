@@ -1,6 +1,7 @@
 package org.enigma.zooticket.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.enigma.zooticket.constant.AppPath;
 import org.enigma.zooticket.model.response.CommonResponse;
 import org.enigma.zooticket.model.response.ReportResponse;
 import org.enigma.zooticket.service.ReportService;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/reports")
+@RequestMapping(AppPath.REPORTS)
 @RequiredArgsConstructor
 public class ReportController {
     private final ReportService reportService;
 
-    @GetMapping("/monthly")
+    @GetMapping(AppPath.MONTHLY_REPORT)
     public ResponseEntity<?> getMonthlyReport(@RequestParam("month") Integer month, @RequestParam("year") Integer year) {
         List<ReportResponse> reportResponses = reportService.getReportByMonth(month, year);
 
@@ -31,7 +32,7 @@ public class ReportController {
                         .build());
     }
 
-    @GetMapping("/daily")
+    @GetMapping(AppPath.DAILY_REPORT)
     public ResponseEntity<?> getMonthlyReport(@RequestParam("month") Integer month, @RequestParam("year") Integer year, @RequestParam("day") Integer day) {
         List<ReportResponse> reportResponses = reportService.getReportByDay(year, month, day);
 

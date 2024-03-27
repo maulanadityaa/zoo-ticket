@@ -1,6 +1,7 @@
 package org.enigma.zooticket.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.enigma.zooticket.constant.AppPath;
 import org.enigma.zooticket.model.request.AuthRequest;
 import org.enigma.zooticket.model.response.CommonResponse;
 import org.enigma.zooticket.model.response.LoginResponse;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping(AppPath.AUTH)
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
 
-    @PostMapping("/signup")
+    @PostMapping(AppPath.SIGNUP)
     public ResponseEntity<?> register(@RequestBody AuthRequest authRequest) {
         RegisterResponse registerResponse = authService.register(authRequest);
 
@@ -32,7 +33,7 @@ public class AuthController {
                 );
     }
 
-    @PostMapping("/signin")
+    @PostMapping(AppPath.SIGNIN)
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         LoginResponse loginResponse = authService.login(authRequest);
 

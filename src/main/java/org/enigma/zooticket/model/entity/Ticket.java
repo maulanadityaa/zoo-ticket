@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.enigma.zooticket.constant.DbPath;
 
 import java.util.Date;
 
@@ -22,7 +23,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "m_ticket")
+@Table(name = DbPath.TICKET_SCHEMA)
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

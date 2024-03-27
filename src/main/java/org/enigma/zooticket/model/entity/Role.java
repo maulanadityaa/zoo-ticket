@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.enigma.zooticket.constant.DbPath;
 import org.enigma.zooticket.constant.ERole;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "m_role")
+@Table(name = DbPath.ROLE_SCHEMA)
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

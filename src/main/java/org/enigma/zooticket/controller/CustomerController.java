@@ -1,6 +1,7 @@
 package org.enigma.zooticket.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.enigma.zooticket.constant.AppPath;
 import org.enigma.zooticket.model.request.CustomerRequest;
 import org.enigma.zooticket.model.response.CommonResponse;
 import org.enigma.zooticket.model.response.CustomerResponse;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/customers")
+@RequestMapping(AppPath.CUSTOMERS)
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -37,7 +38,7 @@ public class CustomerController {
                         .build());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(AppPath.GET_BY_ID)
     public ResponseEntity<?> getCustomerById(@PathVariable String id) {
         CustomerResponse customerResponse = customerService.findById(id);
 
@@ -74,7 +75,7 @@ public class CustomerController {
                         .build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(AppPath.DELETE_BY_ID)
     public ResponseEntity<?> deleteCustomer(@PathVariable String id) {
         customerService.delete(id);
 

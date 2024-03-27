@@ -1,6 +1,7 @@
 package org.enigma.zooticket.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.enigma.zooticket.constant.AppPath;
 import org.enigma.zooticket.model.request.TransactionRequest;
 import org.enigma.zooticket.model.response.CommonResponse;
 import org.enigma.zooticket.model.response.TransactionResponse;
@@ -61,7 +62,7 @@ public class TransactionController {
                         .build());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(AppPath.GET_BY_ID)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<?> getTransactionById(@PathVariable String id) {
         TransactionResponse transactionResponse = transactionService.getTransactionById(id);

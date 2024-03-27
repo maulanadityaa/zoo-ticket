@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.enigma.zooticket.constant.DbPath;
 import org.enigma.zooticket.constant.EStatus;
 import org.enigma.zooticket.constant.ETicketType;
 
@@ -25,7 +26,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "m_ticket_type")
+@Table(name = DbPath.TICKET_TYPE_SCHEMA)
 public class TicketType {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

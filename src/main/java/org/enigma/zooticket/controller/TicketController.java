@@ -1,6 +1,7 @@
 package org.enigma.zooticket.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.enigma.zooticket.constant.AppPath;
 import org.enigma.zooticket.model.request.TicketRequest;
 import org.enigma.zooticket.model.response.CommonResponse;
 import org.enigma.zooticket.model.response.TicketResponse;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/tickets")
+@RequestMapping(AppPath.TICKETS)
 public class TicketController {
     private final TicketService ticketService;
 
@@ -63,7 +64,7 @@ public class TicketController {
                         .build());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(AppPath.GET_BY_ID)
     public ResponseEntity<?> getTicketById(@PathVariable String id) {
         TicketResponse ticketResponse = ticketService.getTicketById(id);
 
@@ -75,7 +76,7 @@ public class TicketController {
                         .build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(AppPath.DELETE_BY_ID)
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteTicket(@PathVariable String id) {
         ticketService.deleteTicket(id);

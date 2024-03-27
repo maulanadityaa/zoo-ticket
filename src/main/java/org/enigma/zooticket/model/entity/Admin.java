@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.enigma.zooticket.constant.DbPath;
 import org.enigma.zooticket.constant.EStatus;
 
 @Getter
@@ -25,7 +26,7 @@ import org.enigma.zooticket.constant.EStatus;
 @Builder(toBuilder = true)
 @Entity
 @Data
-@Table(name = "m_admin")
+@Table(name = DbPath.ADMIN_SCHEMA)
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

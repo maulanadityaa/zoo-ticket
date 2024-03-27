@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.enigma.zooticket.constant.DbPath;
 import org.enigma.zooticket.constant.EStatus;
 
 import java.time.LocalDateTime;
@@ -28,7 +29,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "m_customer")
+@Table(name = DbPath.CUSTOMER_SCHEMA)
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

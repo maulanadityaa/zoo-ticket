@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.enigma.zooticket.constant.DbPath;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -22,7 +23,7 @@ import org.hibernate.annotations.CascadeType;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Entity
-@Table(name = "m_user")
+@Table(name = DbPath.USER_SCHEMA)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
