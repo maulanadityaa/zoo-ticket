@@ -17,13 +17,13 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
-    @Value("${app.enigmat.jwt.jwt-secret}")
+    @Value("${app.zoo-ticket.jwt.jwt-secret}")
     private String jwtSecret;
 
-    @Value("${app.enigmat.jwt.app-name}")
+    @Value("${app.zoo-ticket.jwt.app-name}")
     private String appName;
 
-    @Value("${app.enigmat.jwt.jwt-expired}")
+    @Value("${app.zoo-ticket.jwt.jwt-expired}")
     private Long jwtExpiredAt;
 
     public String generateToken(AppUser appUser) {

@@ -89,7 +89,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .customer(customer)
                     .transactionDetails(transactionDetails)
                     .build();
-            transactionRepository.insertAndFlush(transaction);
+            transactionRepository.saveAndFlush(transaction);
 
             List<TransactionDetailResponse> transactionDetailResponses = transaction.getTransactionDetails().stream().map(transactionDetail -> {
                 transactionDetail.setTransaction(transaction);

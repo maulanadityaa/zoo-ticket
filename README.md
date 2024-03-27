@@ -37,9 +37,9 @@ This is an example of how to list things you need to use the software and how to
    spring.jpa.hibernate.ddl-auto=update
    spring.jpa.show-sql=true
    #JWT Secret
-   app.zooticket.jwt.jwt-secret=YOUR_JWT_SECRET
-   app.zooticket.jwt.app-name=Zoo Ticketting
-   app.zooticket.jwt.jwt-expired=3600
+   app.zoo-ticket.jwt.jwt-secret=YOUR_JWT_SECRET
+   app.zoo-ticket.jwt.app-name=Zoo Ticketting
+   app.zoo-ticket.jwt.jwt-expired=3600
 
    ```
 3. Install all dependencies and run Maven reload
@@ -95,7 +95,7 @@ This is an example of how to list things you need to use the software and how to
     "totalPrice": 440000,
     "transactionDetails": [
       {
-        "id": null,
+        "id": "c7f0c29b-e7b7-41ec-a452-75aec54cdbca",
         "quantity": 4,
         "createdAt": "2024-03-27T19:53:47.383543782",
         "ticketResponse": {
