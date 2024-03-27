@@ -7,7 +7,5 @@ import org.enigma.zooticket.model.response.RegisterResponse;
 public interface AuthService {
     RegisterResponse register(AuthRequest authRequest);
 
-    RegisterResponse registerAdmin(AuthRequest authRequest);
-
     LoginResponse login(AuthRequest authRequest);
 }

@@ -8,6 +8,7 @@ import org.enigma.zooticket.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +24,12 @@ public class RoleServiceImpl implements RoleService {
         }
 
         Role currentRole = Role.builder()
+                .id(UUID.randomUUID().toString())
                 .name(role)
                 .build();
-        return roleRepository.save(currentRole);
+        roleRepository.insertRole(currentRole);
+        
+        return currentRole;
     }
 
     @Override

@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,17 +53,10 @@ public class AuthServiceImpl implements AuthService {
                     .password(passwordEncoder.encode(authRequest.getPassword()))
                     .role(role)
                     .build();
-            userRepository.saveAndFlush(user);
+            userRepository.insertAndFlush(user);
 
 
             if (role.getName() == ERole.ROLE_CUSTOMER) {
-//                Customer customer = Customer.builder()
-////                        .fullName(authRequest.getFullName())
-////                        .email(authRequest.getEmail())
-////                        .mobilePhone(authRequest.getMobilePhone())
-////                        .dob(Helper.stringToDate(authRequest.getDateOfBirth()))
-//                        .user(user)
-//                        .build();
                 CustomerRequest customerRequest = CustomerRequest.builder()
                         .fullName(authRequest.getFullName())
                         .phone(authRequest.getMobilePhone())
@@ -73,44 +67,14 @@ public class AuthServiceImpl implements AuthService {
                 customerService.create(customerRequest);
             } else if (role.getName() == ERole.ROLE_ADMIN) {
                 Admin admin = Admin.builder()
+                        .id(UUID.randomUUID().toString())
                         .name(authRequest.getFullName())
                         .mobilePhone(authRequest.getMobilePhone())
                         .user(user)
                         .status(EStatus.ACTIVE)
                         .build();
-                adminRepository.save(admin);
+                adminRepository.saveAdmin(admin);
             }
-
-            return RegisterResponse.builder()
-                    .username(user.getUsername())
-                    .role(user.getRole().getName().toString())
-                    .build();
-        } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Transactional(rollbackOn = Exception.class)
-    @Override
-    public RegisterResponse registerAdmin(AuthRequest authRequest) {
-        try {
-            Role role = roleService.getOrSave(ERole.ROLE_ADMIN);
-
-            User user = User.builder()
-                    .username(authRequest.getUsername().toLowerCase())
-                    .password(passwordEncoder.encode(authRequest.getPassword()))
-                    .role(role)
-                    .build();
-            userRepository.saveAndFlush(user);
-
-            Admin admin = Admin.builder()
-                    .name(authRequest.getFullName())
-                    .mobilePhone(authRequest.getMobilePhone())
-                    .user(user)
-                    .status(EStatus.ACTIVE)
-                    .build();
-            adminRepository.save(admin);
 
             return RegisterResponse.builder()
                     .username(user.getUsername())

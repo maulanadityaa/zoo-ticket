@@ -10,6 +10,8 @@ import org.enigma.zooticket.repository.TicketTypeRepository;
 import org.enigma.zooticket.service.TicketTypeService;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class TicketTypeServiceImpl implements TicketTypeService {
@@ -18,7 +20,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     @Override
     public TicketTypeResponse create(TicketTypeRequest ticketTypeRequest) {
         TicketType ticketType = toTicketType(ticketTypeRequest);
-        ticketTypeRepository.save(ticketType);
+        ticketTypeRepository.saveTicketType(ticketType);
 
         return toTicketTypeResponse(ticketType);
     }
@@ -34,7 +36,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
                     .price(ticketTypeRequest.getPrice())
                     .status(EStatus.ACTIVE)
                     .build();
-            ticketTypeRepository.save(ticketType);
+            ticketTypeRepository.updateTicketType(ticketType);
 
             return toTicketTypeResponse(ticketType);
         }
@@ -57,7 +59,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 
         if (ticketType != null) {
             ticketType.setStatus(EStatus.INACTIVE);
-            ticketTypeRepository.save(ticketType);
+            ticketTypeRepository.updateTicketType(ticketType);
         }
     }
 
@@ -72,6 +74,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 
     private static TicketType toTicketType(TicketTypeRequest ticketTypeRequest) {
         return TicketType.builder()
+                .id(UUID.randomUUID().toString())
                 .ticketType(ticketTypeRequest.getTicketType())
                 .price(ticketTypeRequest.getPrice())
                 .status(EStatus.ACTIVE)

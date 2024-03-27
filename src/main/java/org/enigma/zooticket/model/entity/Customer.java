@@ -56,4 +56,18 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Transaction> transactions;
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + id + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", mobilePhone='" + mobilePhone + '\'' +
+                ", email='" + email + '\'' +
+                ", dob=" + dob +
+                ", status=" + status +
+                ", user=" + user +
+                ", transactions=" + transactions +
+                '}';
+    }
 }

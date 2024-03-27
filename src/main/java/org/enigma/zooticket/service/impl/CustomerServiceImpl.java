@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
         System.out.println(customerRequest.getFullName());
         try {
             Customer customer = toCustomer(customerRequest);
-            customerRepository.save(customer);
+            customerRepository.saveCustomer(customer);
 
             return toCustomerResponse(customer);
         } catch (ParseException e) {
@@ -37,6 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse update(CustomerRequest customerRequest) {
         Customer customer = customerRepository.findById(customerRequest.getId()).orElse(null);
+        System.out.println(customer.toString());
 
         try {
             if (customer != null) {
@@ -49,7 +51,14 @@ public class CustomerServiceImpl implements CustomerService {
                         .status(EStatus.ACTIVE)
                         .user(customer.getUser())
                         .build();
-                customerRepository.save(customer);
+                customerRepository.updateCustomer(customer);
+
+                customer.setUser(User.builder()
+                        .id(customer.getUser().getId())
+                        .username(customer.getUser().getUsername())
+                        .role(customer.getUser().getRole())
+                        .build());
+                System.out.println(customer.getUser().getUsername());
 
                 return toCustomerResponse(customer);
             }
@@ -83,7 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (customer != null) {
             customer.setStatus(EStatus.INACTIVE);
-            customerRepository.save(customer);
+            customerRepository.updateCustomer(customer);
         }
     }
 
@@ -104,6 +113,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private static Customer toCustomer(CustomerRequest customerRequest) throws ParseException {
         return Customer.builder()
+                .id(UUID.randomUUID().toString())
                 .fullName(customerRequest.getFullName())
                 .email(customerRequest.getEmail())
                 .dob(Helper.stringToDate(customerRequest.getDateOfBirth()))

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class TicketServiceImpl implements TicketService {
             TicketType ticketType = ticketTypeService.getByTicketType(ticketRequest.getTicketType());
             if (ticketType != null) {
                 Ticket ticket = toTicket(ticketRequest, ticketType);
-                ticketRepository.save(ticket);
+                ticketRepository.saveTicket(ticket);
 
                 return toTicketResponse(ticket);
             }
@@ -52,7 +53,7 @@ public class TicketServiceImpl implements TicketService {
                             .validAt(Helper.stringToDate(ticketRequest.getValidAt()))
                             .ticketType(ticketType)
                             .build();
-                    ticketRepository.save(ticket);
+                    ticketRepository.updateTicket(ticket);
 
                     return toTicketResponse(ticket);
                 }
@@ -103,6 +104,7 @@ public class TicketServiceImpl implements TicketService {
 
     private static Ticket toTicket(TicketRequest ticketRequest, TicketType ticketType) throws ParseException {
         return Ticket.builder()
+                .id(UUID.randomUUID().toString())
                 .stock(ticketRequest.getStock())
                 .validAt(Helper.stringToDate(ticketRequest.getValidAt()))
                 .ticketType(ticketType)
