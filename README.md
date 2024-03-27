@@ -6,7 +6,7 @@
 ### Built With
 
 - [Springboot v3.2.4](https://spring.io/)
-- [Java 17](hhttps://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [PostgreSQL](https://www.postgresql.org/docs/)
 - [Swagger](https://realrashid.github.io/sweet-alert/)
 - [Maven](https://maven.apache.org/)
