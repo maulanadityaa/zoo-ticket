@@ -46,7 +46,9 @@ This is an example of how to list things you need to use the software and how to
 
 4. Then run the project
 
-## API Endpoints
+## API Documentation
+
+Postman : https://documenter.getpostman.com/view/32332849/2sA35EZiAM
 
 ### Example Request
 
