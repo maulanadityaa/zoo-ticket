@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
     @Modifying
@@ -18,4 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     @Transactional
     @Query(value = "UPDATE m_customer SET full_name = :#{#customer.fullName}, dob = :#{#customer.dob}, email = :#{#customer.email}, phone = :#{#customer.mobilePhone}, status = :#{#customer.status.name()} WHERE id = :#{#customer.id}", nativeQuery = true)
     void updateCustomer(Customer customer);
+
+    @Query(value = "SELECT c FROM Customer c WHERE c.status = 'ACTIVE'")
+    List<Customer> findAllWhereActive();
 }

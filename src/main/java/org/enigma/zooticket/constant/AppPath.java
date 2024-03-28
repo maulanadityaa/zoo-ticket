@@ -14,5 +14,6 @@ public class AppPath {
     public static final String SIGNIN = "/signin";
     public static final String MONTHLY_REPORT = "/monthly";
     public static final String DAILY_REPORT = "/daily";
+    public static final String GET_WHERE_ACTIVE = "/active";
 
 }

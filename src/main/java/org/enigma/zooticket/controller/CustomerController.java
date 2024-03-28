@@ -64,6 +64,18 @@ public class CustomerController {
                         .data(customerResponse)
                         .build());
     }
+    @GetMapping(AppPath.GET_WHERE_ACTIVE)
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<?> getAllCustomerWhereActive() {
+        List<CustomerResponse> customerResponse = customerService.findAllWhereActive();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.<List<CustomerResponse>>builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message("All customers retrieved successfully")
+                        .data(customerResponse)
+                        .build());
+    }
 
     @PutMapping
     public ResponseEntity<?> updateCustomer(@RequestBody CustomerRequest customerRequest) {

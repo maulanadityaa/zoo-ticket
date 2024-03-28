@@ -10,5 +10,6 @@ public interface CustomerService {
     CustomerResponse update(CustomerRequest customerRequest);
     CustomerResponse findById(String id);
     List<CustomerResponse> findAll();
+    List<CustomerResponse> findAllWhereActive();
     void delete(String id);
 }

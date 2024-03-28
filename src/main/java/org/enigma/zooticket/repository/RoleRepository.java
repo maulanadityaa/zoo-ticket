@@ -1,8 +1,10 @@
 package org.enigma.zooticket.repository;
 
+import jakarta.transaction.Transactional;
 import org.enigma.zooticket.constant.ERole;
 import org.enigma.zooticket.model.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +14,8 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, String> {
     Optional<Role> findByName(ERole name);
 
+    @Modifying
+    @Transactional
     @Query(value = "INSERT INTO m_role (id, name) VALUES (:#{#role.id}, :#{#role.name.name()});", nativeQuery = true)
     void insertRole(Role role);
 }

@@ -26,7 +26,7 @@ This is an example of how to list things you need to use the software and how to
    ```sh
       https://github.com/maulanadityaa/zoo-ticket.git
    ```
-2. Edit application.properties Config
+2. Rename application.properties.example to application.properties and change few config
 
    ```properties
    spring.datasource.username=YOUR_DATABASE_USERNAME
@@ -38,7 +38,7 @@ This is an example of how to list things you need to use the software and how to
    spring.jpa.show-sql=true
    #JWT Secret
    app.zoo-ticket.jwt.jwt-secret=YOUR_JWT_SECRET
-   app.zoo-ticket.jwt.app-name=Zoo Ticketting
+   app.zoo-ticket.jwt.app-name=Zoo Ticketing
    app.zoo-ticket.jwt.jwt-expired=3600
 
    ```

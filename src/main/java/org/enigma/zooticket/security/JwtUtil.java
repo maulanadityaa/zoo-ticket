@@ -31,12 +31,12 @@ public class JwtUtil {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
             return JWT.create()
-                    .withIssuer(appName) // information about app name
-                    .withSubject(appUser.getId()) // determine object created from (usually userId)
+                    .withIssuer(appName)
+                    .withSubject(appUser.getId())
                     .withExpiresAt(Instant.now().plusSeconds(jwtExpiredAt))
-                    .withIssuedAt(Instant.now()) // determine when the token created
-                    .withClaim("role", appUser.getRole().name()) // JWT payload
-                    .sign(algorithm); // sign the token with defined algorithm
+                    .withIssuedAt(Instant.now())
+                    .withClaim("role", appUser.getRole().name())
+                    .sign(algorithm);
         } catch (JWTCreationException e) {
             throw new RuntimeException();
         }

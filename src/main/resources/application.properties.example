@@ -8,5 +8,5 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 #JWT Secret
 app.zooticket.jwt.jwt-secret=YOUR_JWT_SECRET
-app.zooticket.jwt.app-name=Zoo Ticketting
+app.zooticket.jwt.app-name=Zoo Ticketing
 app.zooticket.jwt.jwt-expired=3600

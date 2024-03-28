@@ -79,6 +79,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public List<CustomerResponse> findAllWhereActive() {
+        List<Customer> customers = customerRepository.findAllWhereActive();
+
+        return customers.stream().map(CustomerServiceImpl::toCustomerResponse).toList();
+    }
+
+    @Override
     public void delete(String id) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new ApplicationException("Customer not found", String.format("Customer with id=%s", id), HttpStatus.NOT_FOUND));
 
@@ -93,6 +100,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .email(customer.getEmail())
                 .phone(customer.getMobilePhone())
                 .dateOfBirth(Helper.dateToString(customer.getDob()))
+                .status(customer.getStatus())
                 .userCredential(UserResponse.builder()
                         .id(customer.getUser().getId())
                         .username(customer.getUser().getUsername())

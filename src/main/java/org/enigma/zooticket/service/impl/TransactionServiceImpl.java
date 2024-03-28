@@ -18,6 +18,7 @@ import org.enigma.zooticket.model.response.TicketTypeResponse;
 import org.enigma.zooticket.model.response.TransactionDetailResponse;
 import org.enigma.zooticket.model.response.TransactionResponse;
 import org.enigma.zooticket.model.response.UserResponse;
+import org.enigma.zooticket.repository.TransactionDetailRepository;
 import org.enigma.zooticket.repository.TransactionRepository;
 import org.enigma.zooticket.service.CustomerService;
 import org.enigma.zooticket.service.TicketService;
@@ -30,6 +31,7 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final CustomerService customerService;
     private final TicketService ticketService;
+    private final TransactionDetailRepository transactionDetailRepository;
 
     @Transactional(rollbackOn = Exception.class)
     @Override
@@ -89,23 +92,26 @@ public class TransactionServiceImpl implements TransactionService {
                     .customer(customer)
                     .transactionDetails(transactionDetails)
                     .build();
-            transactionRepository.saveAndFlush(transaction);
+            transactionRepository.insertAndFlush(transaction);
 
             List<TransactionDetailResponse> transactionDetailResponses = transaction.getTransactionDetails().stream().map(transactionDetail -> {
+                transactionDetail.setId(UUID.randomUUID().toString());
                 transactionDetail.setTransaction(transaction);
+                transactionDetailRepository.saveTransactionDetail(transactionDetail);
 
                 Ticket ticket = transactionDetail.getTicket();
                 ticket.setStock(ticket.getStock() - transactionDetail.getQuantity());
                 TicketRequest ticketRequest = TicketRequest.builder()
                         .id(ticket.getId())
                         .ticketType(ticket.getTicketType().getTicketType())
-                        .stock(ticket.getStock() - transactionDetail.getQuantity())
+                        .stock(ticket.getStock())
                         .validAt(Helper.dateToString(ticket.getValidAt()))
                         .build();
                 ticketService.updateTicket(ticketRequest);
 
                 return toTransactionDetailResponse(transactionDetail, ticket);
             }).toList();
+
 
             return toTransactionResponse(transaction, transactionDetailResponses);
         } catch (ParseException e) {
@@ -159,8 +165,6 @@ public class TransactionServiceImpl implements TransactionService {
 
     private static TransactionResponse toTransactionResponse(Transaction transaction, List<TransactionDetailResponse> transactionDetailResponses) {
         Long totalPrice = (long) transactionDetailResponses.stream().mapToInt(tdr -> Math.toIntExact(tdr.getTicketResponse().getTicketType().getPrice() * tdr.getQuantity())).sum();
-        System.out.println(transaction.getTransDate().getMonthValue());
-        System.out.println(transaction.getTransDate().getYear());
 
         return TransactionResponse.builder()
                 .id(transaction.getId())

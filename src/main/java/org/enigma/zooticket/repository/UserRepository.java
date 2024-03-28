@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByUsername(String username);
 
     @Modifying
+    @Transactional
     @Query(value = "INSERT INTO m_user (id, username, password, role_id) VALUES (:#{#user.id}, :#{#user.username}, :#{#user.password}, :#{#user.role.id});", nativeQuery = true)
     void saveUser(User user);
 
