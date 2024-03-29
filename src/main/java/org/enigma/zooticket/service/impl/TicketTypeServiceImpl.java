@@ -47,6 +47,7 @@ public class TicketTypeServiceImpl implements TicketTypeService {
 
     @Override
     public TicketType getByTicketType(ETicketType ticketType) {
+        System.out.println(ticketType);
         TicketType type = ticketTypeRepository.findByTicketType(ticketType);
 
         if (type != null) {
