@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TicketTypeRepository extends JpaRepository<TicketType, String> {
 
-    @Query("SELECT t FROM TicketType t WHERE t.ticketType = :ticketType AND t.status = 'ACTIVE'")
+    @Query(value = "SELECT * FROM m_ticket_type WHERE ticket_type = :#{#ticketType} AND status = 'ACTIVE'", nativeQuery = true)
     TicketType findByTicketType(ETicketType ticketType);
 
     @Modifying

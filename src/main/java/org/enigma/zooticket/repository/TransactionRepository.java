@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
 
-    @Query("SELECT t FROM Transaction t WHERE t.customer.id = :customerId")
+    @Query(value = "SELECT * FROM t_transaction WHERE customer_id = :#{#customerId}", nativeQuery = true)
     List<Transaction> findByCustomerId(String customerId);
 
     @Modifying

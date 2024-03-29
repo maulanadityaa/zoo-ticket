@@ -21,6 +21,6 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
     @Query(value = "UPDATE m_customer SET full_name = :#{#customer.fullName}, dob = :#{#customer.dob}, email = :#{#customer.email}, phone = :#{#customer.mobilePhone}, status = :#{#customer.status.name()} WHERE id = :#{#customer.id}", nativeQuery = true)
     void updateCustomer(Customer customer);
 
-    @Query(value = "SELECT c FROM Customer c WHERE c.status = 'ACTIVE'")
+    @Query(value = "SELECT * FROM m_customer WHERE status = 'ACTIVE'", nativeQuery = true)
     List<Customer> findAllWhereActive();
 }
